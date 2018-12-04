@@ -213,7 +213,7 @@
 
             return mark;
         }
-        
+
     };
     u.remove = function(el){
         if(el && el.parentNode){
@@ -331,7 +331,7 @@
                     break;
             }
         }
-        
+
     };
     u.prepend = function(el, html){
         if(!u.isElement(el)){
@@ -475,7 +475,7 @@
         }
     };
 
-   
+
     /*by king*/
     u.fixIos7Bar = function(el){
         if(!u.isElement(el)){
@@ -596,23 +596,9 @@
             }
         );
     };
-    u.thisActive = function( obj ){
-		var eP = obj.el.parentNode.querySelectorAll( obj.el.tagName ),
-            index ;
-		for( var x in eP ){
-            if( eP[x].nodeType ){
-                if( eP[x] === obj.el ){
-                    $api.addCls(  eP[x], obj.class || 'active' );
-                    index = x;
-                }else{
-                    $api.removeCls(  eP[x], obj.class || 'active' );
-                };
-            };
-		};
-        return index;
-    };
+
 /*end*/
-    
+
 
     window.$api = u;
 
