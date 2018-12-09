@@ -365,7 +365,7 @@
 			//alert(JSON.stringify(ret));
 			api.hideProgress();
 			if (ret) {
-			receive_fnGetListInfo(ret, err);
+//			receive_fnGetListInfo(ret, err);																					//刷新列表信息
 			} else {
 				fnNotes(err);
 			}
@@ -398,7 +398,8 @@
 
 		function receive_fnGetListInfo(ret, err) {
 			//alert(JSON.stringify(ret));
-			if (ret && typeof (ret.devices) != 'undefined' && ret.devices.length) {
+			if (ret && typeof (ret.devices) != 'undefined' && ret.devices.length)
+			{
 				var eLi = $api.domAll('li.list');
 				for (var i = 0; i < eLi.length; i++) {
 					$api.remove(eLi[i]);
@@ -427,7 +428,21 @@
 						 }*/
 					}
 					ret.devices[x].productName = ret.devices[x].alias || ret.devices[x].productName;
-					$api.after($api.dom('.deviceList ul:nth-child(' + vPosition + ') li.empty'), '<li tapmode="opacity" ' + (vPosition === 3 ? '' : 'onclick="fnSetSubscribe(this);"') + ' class="list id_' + ret.devices[x].did + '" >' + ' 	<data class="hide" >' + JSON.stringify(ret.devices[x]) + '</data>' + '	<div class="flex-wrap ic-device-' + (vPosition === 3 ? 'no' : 'ok' ) + '">' + '		<div class="flex-con row-nowrap">' + '			<h6 class="row-nowrap" >' + (ret.devices[x].productName ? ret.devices[x].productName : ' ' ) + '</h6>' + '			<p class="row-nowrap" >' + ret.devices[x].mac + '</p>' + '		</div>' + '		<div class="ic-arrow-r ' + (vPosition === 3 ? 'no-arrow' : '') + '">' + '			<span>' + (ret.devices[x].netStatus ? (ret.devices[x].isBind ? (ret.devices[x].isLAN ? '局域网' : '远程') : '未绑定' ) : '') + '</span>' + '		</div>' + '	</div>' + (vPosition !== 2 ? ('<div class="right-btns"><div tapmode="opacity" onclick="fnUnbindDevice(this)" class="red" ><span>删除</span></div>') : '') + '    </div>' + '</li>');
+
+					$api.after($api.dom('.deviceList ul:nth-child(' + vPosition + ') li.empty'),
+					'<li tapmode="opacity" ' + (vPosition === 3 ? '' : 'onclick="fnSetSubscribe(this);"')+ ' class="list id_' + ret.devices[x].did + '" >'
+					 + ' 	<data class="hide" >' + JSON.stringify(ret.devices[x]) + '</data>'
+					 + '	<div class="flex-wrap ic-device-' + (vPosition === 3 ? 'no' : 'ok' ) + '">'
+					  + '		<div class="flex-con row-nowrap">'
+						+ '			<h6 class="row-nowrap" >' + (ret.devices[x].productName ? ret.devices[x].productName : ' ' ) + '</h6>'
+						+ '			<p class="row-nowrap" >' + ret.devices[x].mac + '</p>'
+						+'		</div>'
+						+ '		<div class="ic-arrow-r ' + (vPosition === 3 ? 'no-arrow' : '') + '">'
+						 + '			<span>' + (ret.devices[x].netStatus ? (ret.devices[x].isBind ? (ret.devices[x].isLAN ? '局域网' : '远程') : '未绑定' ) : '') + '</span>'
+						  + '	</div>'
+						+ '	</div>' + (vPosition !== 2 ? ('<div class="right-btns"><div tapmode="opacity" onclick="fnUnbindDevice(this)" class="red" ><span>删除</span></div>') : '')
+						 + '    </div>'
+						 + '</li>');
 				}
 				iniRightBtns('ul.canDo li.list');
 			} else {
