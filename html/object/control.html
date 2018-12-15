@@ -326,7 +326,7 @@
 
     // 读数据点数据
     function readDataPoint(dp, data) {
-        console.log('读' + dp + "个数据点");
+        //console.log('读' + dp + "个数据点");
         switch (dp) {
             case dataPoint.GosDeviceWrite_key:
                 key = data["key"];
@@ -338,6 +338,7 @@
                 ADC = data["ADC"];
                 break;
         }
+        console.log(dp);
     }
 
     // 写数据点数据

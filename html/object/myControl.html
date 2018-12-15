@@ -45,7 +45,7 @@
         device = api.pageParam.pageParam;
         gizWifiDevice = api.require('gizWifiDevice');
 
-        registerDeviceStatusNotification(); //注册设备状态变化监听
+          registerDeviceStatusNotification(); //注册设备状态变化监听
 
     };
 
@@ -58,7 +58,7 @@
             }
 
         }, function(ret, err) {
-            console.log("注册通知接口, 设备主动上报状态");
+            //    console.log("注册通知接口, 设备主动上报状态");
             receive_fnRegisterDeviceStatusNotification(ret, err);
         });
     }
@@ -94,11 +94,11 @@
 
     // ************************读写设备状态相关方法************************
     function readData(ret) {
-        console.log("********************readData被调用**********************");
+        //    console.log("********************readData被调用**********************");
         var data = ret.data;
-        console.log("data = " + JSON.stringify(data));
+        //      console.log("data = " + JSON.stringify(data));
         if (data && !$api.isEmptyObject(data)) {
-            console.log('读数据');
+            //    console.log('读数据');
             // 读数据
             readDataPoint(dataPoint.GosDeviceWrite_key, data);
             readDataPoint(dataPoint.GosDeviceRead_led, data);
@@ -109,7 +109,7 @@
 
     // 读数据点数据
     function readDataPoint(dp, data) {
-        console.log('读' + dp + "个数据点");
+        //  console.log('读' + dp + "个数据点");
         switch (dp) {
             case dataPoint.GosDeviceWrite_key:
                 key = data["key"];
@@ -121,17 +121,35 @@
                 ADC = data["ADC"];
                 break;
         }
+
     }
 
     function updateUI() {
-        updateBoolShow('key0', key); //gos_keyBlock
-        updateBoolShow('gos_ledBlock', led);
+        updateBoolShow('ooopic', key); //gos_keyBlock
+        updateBoolShow('Lamp', led);
         //    updateBoolShow1('btns', led); //gos_keyBlock
         //  updateNumberReadShow('gos_ADC', ADC);
     }
 
 
     function updateBoolShow(blockClsName, value) {
+        var blockEl = getElByClsName(blockClsName);
+
+        if (!value) {
+            $api.addCls(blockEl, 'Off');
+            //  el.innerText = "开";
+            if ($api.hasCls(blockEl, 'off') == false) {
+                $api.addCls(blockEl, 'off');
+            }
+
+        } else {
+            $api.removeCls(blockEl, "Off");
+            //  el.innerText = "关";
+            if ($api.hasCls(blockEl, "off")) {
+                $api.removeCls(blockEl, "off");
+            }
+        }
+
         /*
           var blockEl = getElByClsName(blockClsName);
           var buttonClsName = "." + blockClsName.replace("Block", "");
@@ -184,13 +202,15 @@
                     $api.addCls(el.querySelector(buttonClsName), "off");
                 }
         */
+        //如果按键色关闭状态
         if ($api.hasCls(el, 'off')) {
-            updateButtonAttr('.gos_keyBlock', false);
+            updateButtonAttr('.gos_keyBlock', true); //打开LED.高电平点亮
+
             //    $api.removeCls(doms[0], 'Off'); //关灯
             $api.removeCls(el, 'off'); //开关状态设为on
             console.log("按键开");
         } else {
-            updateButtonAttr('.gos_keyBlock', true);
+            updateButtonAttr('.gos_keyBlock', false); //否则关闭LED.低电平灭
             //      $api.addCls(doms[0], 'Off'); //开灯
             $api.addCls(el, 'off'); //开关状态设为off
             console.log("按键关");
@@ -218,13 +238,14 @@
                 break;
         }
 
-        console.log("下发控制指令： data = " + JSON.stringify(data) + "device = " + JSON.stringify(device) + ", device.device = " + JSON.stringify(device.device));
+        console.log("下发控制指令： data = " + JSON.stringify(data));
+        // console.log("下发控制指令： data = " + JSON.stringify(data) + "device = " + JSON.stringify(device) + ", device.device = " + JSON.stringify(device.device));
         gizWifiDevice.write({
             device: device,
             sn: 0,
             data: data
         }, function(ret, err) {
-            console.log('下发控制指令回调 ret = ' + JSON.stringify(ret) + ', err = ' + JSON.stringify(err));
+            //        console.log('下发控制指令回调 ret = ' + JSON.stringify(ret) + ', err = ' + JSON.stringify(err));
         });
     }
 
