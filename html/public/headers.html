@@ -227,7 +227,8 @@
 			</div>
 			关于
 		</header>
-		<header class="control" >
+	<!--	<header class="control" >               修改控制页面名字 -->
+			<header class="myControl" >
 			<div tapmode="opacity" onclick="fnCancelDevice();" class="ic-back-auto"></div>
 			<div class="controlTitle">
 				控制设备
@@ -252,7 +253,7 @@
 					if (api.systemType === 'ios') {
 						fnFNScanner()
 					} else {
-					
+
 					alert('暂不支持扫码')
 					}
 					break;

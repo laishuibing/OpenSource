@@ -6,7 +6,8 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <link rel="stylesheet" href="../../css/aui.css">
-  <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" type="text/css" href="../../css/test.css" />
     <style>
         body {
             background-color: #f1f1f1;
@@ -129,12 +130,17 @@
         }
 
         .bg-add {
-          padding-top: 240px;
-          background-size: 150px auto;
+            padding-top: 240px;
+            background-size: 150px auto;
         }
 
-        .btns .ic-checkbox{ background-position: center -60px; }
-      	.Active .ic-checkbox{ background-position: center 0px; }
+        .btns .ic-checkbox {
+            background-position: center -60px;
+        }
+
+        .Active .ic-checkbox {
+            background-position: center 0px;
+        }
 
         textarea {
             outline: 0 none;
@@ -176,8 +182,8 @@
 <div class="">
   <span class="gos_rightBlock gos_keyBlock">
     <span class="  aui-btn aui-btn-info key0 gos_key "></span>
-  </span>
-</div>
+            </span>
+            </div>
 
 
 </body>
@@ -189,234 +195,218 @@
 <script type="text/javascript" src="../../script/Base64.js"></script>
 <script type="text/javascript" src="../../script/slide/rangeslider.min.js"></script>
 <script type="text/javascript">
+    // 数据点枚举标识
+    var dataPoint = {
+        GosDeviceWrite_key: 0,
+        GosDeviceRead_led: 1,
+        GosDeviceRead_ADC: 2,
+    }
+    var device, gizWifiDevice;
 
-// 数据点枚举标识
-var dataPoint = {
-   GosDeviceWrite_key: 0,
-   GosDeviceRead_led: 1,
-   GosDeviceRead_ADC: 2,
-}
-  var device, gizWifiDevice;
+    // 数据点值
+    var key = false;
+    var led = false;
+    var ADC = 0;
+    //  var deviceName, alias;
+    var unSubscribe = false;
 
-  // 数据点值
-  var key = false;
-  var led = false;
-  var ADC = 0;
-//  var deviceName, alias;
-  var unSubscribe = false;
+    var isController = false; //标识是否刚从设备列表进入控制界面，若是，且设备变为可控后，值需修改为true
 
- var isController = false;  //标识是否刚从设备列表进入控制界面，若是，且设备变为可控后，值需修改为true
-
-	apiready = function(){
-//    api.addEventListener({ name : 'viewappear'}, fnAppear);
-  addButtonClickEvent("gos_keyBlock");
+    apiready = function() {
+        //    api.addEventListener({ name : 'viewappear'}, fnAppear);
+        addButtonClickEvent("gos_keyBlock");
         device = api.pageParam.pageParam;
         gizWifiDevice = api.require('gizWifiDevice');
 
-      //  checkDeviceNetStatus(); //检测设备可控状态
+        //  checkDeviceNetStatus(); //检测设备可控状态
         //  setupTitle();
-      registerDeviceStatusNotification(); //注册设备状态变化监听
-	}
+        registerDeviceStatusNotification(); //注册设备状态变化监听
+    }
 
-// 注册设备状态变化监听
-function registerDeviceStatusNotification()
-{
-    gizWifiDevice.registerNotifications({
-        device:{
-            did: device.did,
-            mac: device.mac
-        }
+    // 注册设备状态变化监听
+    function registerDeviceStatusNotification() {
+        gizWifiDevice.registerNotifications({
+            device: {
+                did: device.did,
+                mac: device.mac
+            }
 
-    }, function(ret, err){
-      console.log("注册通知接口, 设备主动上报状态");
-        receive_fnRegisterDeviceStatusNotification(ret, err);
-    });
-}
-// 设备主动上报状态回调
-function receive_fnRegisterDeviceStatusNotification(ret, err){
-//   console.log("注册通知接口, 设备主动上报状态");
-//    console.log("ret = " + JSON.stringify(ret) + ", err = " + JSON.stringify(err));
-    if (!err) {
-        var netStatus = JSON.stringify(ret.netStatus);
-        if (netStatus == 2 || netStatus == -1)
-         {
-  //          if (isController == false) {
-//                console.log("通知 关闭定时器");
-  //              api.hideProgress();
-  //              window.clearInterval(timer);
-    //            isController = true;
-      //      }
-            readData(ret);
-        }
-        else
-        {
-            api.hideProgress();
-            if (!unSubscribe) {
-                api.alert({
-                  title: '提示',
-                  msg: '连接已断开',
-                  }, function(ret, err) {
-                  });
-                api.closeWin();
-                fnUnsubscribe();
-                console.log("fnUnsubscribe()");
+        }, function(ret, err) {
+            console.log("注册通知接口, 设备主动上报状态");
+            receive_fnRegisterDeviceStatusNotification(ret, err);
+        });
+    }
+    // 设备主动上报状态回调
+    function receive_fnRegisterDeviceStatusNotification(ret, err) {
+        //   console.log("注册通知接口, 设备主动上报状态");
+        //    console.log("ret = " + JSON.stringify(ret) + ", err = " + JSON.stringify(err));
+        if (!err) {
+            var netStatus = JSON.stringify(ret.netStatus);
+            if (netStatus == 2 || netStatus == -1) {
+                //          if (isController == false) {
+                //                console.log("通知 关闭定时器");
+                //              api.hideProgress();
+                //              window.clearInterval(timer);
+                //            isController = true;
+                //      }
+                readData(ret);
+            } else {
+                api.hideProgress();
+                if (!unSubscribe) {
+                    api.alert({
+                        title: '提示',
+                        msg: '连接已断开',
+                    }, function(ret, err) {});
+                    api.closeWin();
+                    fnUnsubscribe();
+                    console.log("fnUnsubscribe()");
+                }
             }
         }
     }
-}
 
-  // ************************读写设备状态相关方法************************
-   function readData(ret)
-   {
-       console.log("********************readData被调用**********************");
-       var data = ret.data;
-       console.log("data = " + JSON.stringify(data));
-       if (data && !$api.isEmptyObject(data))
-       {
-           console.log('读数据');
-           // 读数据
-           readDataPoint(dataPoint.GosDeviceWrite_key, data);
-           readDataPoint(dataPoint.GosDeviceRead_led, data);
-           readDataPoint(dataPoint.GosDeviceRead_ADC, data);
-           updateUI();
-       }
-   }
-
-
-   function updateUI()
-   {
-       updateBoolShow('key0', key);      //gos_keyBlock
-       updateBoolShow('gos_ledBlock', led);
-       updateBoolShow1('btns', led);      //gos_keyBlock
-       updateNumberReadShow('gos_ADC', ADC);
-   }
-
-function updateBoolShow1(blockClsName, value)
-{
-    var blockEl = getElByClsName(blockClsName);
-    if(value)
-    {
-      $api.addCls(blockEl, 'Active');
+    // ************************读写设备状态相关方法************************
+    function readData(ret) {
+        console.log("********************readData被调用**********************");
+        var data = ret.data;
+        console.log("data = " + JSON.stringify(data));
+        if (data && !$api.isEmptyObject(data)) {
+            console.log('读数据');
+            // 读数据
+            readDataPoint(dataPoint.GosDeviceWrite_key, data);
+            readDataPoint(dataPoint.GosDeviceRead_led, data);
+            readDataPoint(dataPoint.GosDeviceRead_ADC, data);
+            updateUI();
+        }
     }
-    else {
-      $api.removeCls(blockEl, 'Active');
+
+
+    function updateUI() {
+        updateBoolShow('key0', key); //gos_keyBlock
+        updateBoolShow('gos_ledBlock', led);
+        updateBoolShow1('btns', led); //gos_keyBlock
+        updateNumberReadShow('gos_ADC', ADC);
     }
-}
 
-   function updateBoolShow(blockClsName, value)
-   {
-       var blockEl = getElByClsName(blockClsName);
-       var buttonClsName = "." + blockClsName.replace("Block", "");
+    function updateBoolShow1(blockClsName, value) {
+        var blockEl = getElByClsName(blockClsName);
+        if (value) {
+            $api.addCls(blockEl, 'Active');
+        } else {
+            $api.removeCls(blockEl, 'Active');
+        }
+    }
 
-       var el = getElByClsName(blockClsName);
-       console.log("blockEl = " + blockEl);
-       if (value) {
-         el.innerText = "开";
-           if ($api.hasCls(blockEl.querySelector( buttonClsName ), "checked") == false) {
-               $api.addCls(blockEl.querySelector( buttonClsName ), "checked");
+    function updateBoolShow(blockClsName, value) {
+        var blockEl = getElByClsName(blockClsName);
+        var buttonClsName = "." + blockClsName.replace("Block", "");
 
-           }
-       }
-       else
-       {
-          el.innerText = "关";
-           if ($api.hasCls(blockEl.querySelector( buttonClsName ), "checked")) {
-               $api.removeCls(blockEl.querySelector( buttonClsName ), "checked");
-           }
-       }
-   }
+        var el = getElByClsName(blockClsName);
+        console.log("blockEl = " + blockEl);
+        if (value) {
+            el.innerText = "开";
+            if ($api.hasCls(blockEl.querySelector(buttonClsName), "checked") == false) {
+                $api.addCls(blockEl.querySelector(buttonClsName), "checked");
+
+            }
+        } else {
+            el.innerText = "关";
+            if ($api.hasCls(blockEl.querySelector(buttonClsName), "checked")) {
+                $api.removeCls(blockEl.querySelector(buttonClsName), "checked");
+            }
+        }
+    }
 
 
-   //******************数据点为数值只读值的相关事件处理**********************
-   function updateNumberReadShow(clsName, value)
-   {
+    //******************数据点为数值只读值的相关事件处理**********************
+    function updateNumberReadShow(clsName, value) {
         var el = getElByClsName(clsName);
         el.innerText = value;
-   }
-
-   // 读数据点数据
-   function readDataPoint(dp, data)
-   {
-       console.log('读' + dp + "个数据点");
-       switch(dp)
-       {
-           case dataPoint.GosDeviceWrite_key:
-           key = data["key"];
-           break;
-           case dataPoint.GosDeviceRead_led:
-           led = data["led"];
-           break;
-           case dataPoint.GosDeviceRead_ADC:
-           ADC = data["ADC"];
-           break;
-       }
-   }
-
-// 写数据点数据
-function write(dp, value){
-    var data;
-    switch(dp)
-    {
-        case dataPoint.GosDeviceWrite_key:
-            data = {"key": value};
-            break;
     }
 
-    console.log("下发控制指令： data = " + JSON.stringify(data) + "device = " + JSON.stringify(device) + ", device.device = " + JSON.stringify(device.device));
-    gizWifiDevice.write({
-        device: device,
-        sn: 0,
-        data: data
-    }, function(ret, err){
-        console.log('下发控制指令回调 ret = ' + JSON.stringify(ret) + ', err = ' + JSON.stringify(err));
-    });
-}
-
-function updateButtonAttr(buttonClsName, isChecked)
-{
-    // 下发布尔可写值控制指令位置
-  //  console.log("buttonClsName = " + buttonClsName + ", isChecked = " + isChecked);
-    if (buttonClsName == ".gos_key") {
-      //  console.log('buttonClsName == ".gos_key"');
-        write(dataPoint.GosDeviceWrite_key, isChecked);
+    // 读数据点数据
+    function readDataPoint(dp, data) {
+        console.log('读' + dp + "个数据点");
+        switch (dp) {
+            case dataPoint.GosDeviceWrite_key:
+                key = data["key"];
+                break;
+            case dataPoint.GosDeviceRead_led:
+                led = data["led"];
+                break;
+            case dataPoint.GosDeviceRead_ADC:
+                ADC = data["ADC"];
+                break;
+        }
     }
-}
 
-// 按钮被点击调用的方法
-function ios7CBoxDidClick( el, blockClsName){
-     var buttonClsName = "." + blockClsName.replace("Block", "");
+    // 写数据点数据
+    function write(dp, value) {
+        var data;
+        switch (dp) {
+            case dataPoint.GosDeviceWrite_key:
+                data = {
+                    "key": value
+                };
+                break;
+        }
 
-     // 渲染颜色
-     if( $api.hasCls(el.querySelector( buttonClsName ), "checked") ){
-         updateButtonAttr(buttonClsName, false);
+        console.log("下发控制指令： data = " + JSON.stringify(data) + "device = " + JSON.stringify(device) + ", device.device = " + JSON.stringify(device.device));
+        gizWifiDevice.write({
+            device: device,
+            sn: 0,
+            data: data
+        }, function(ret, err) {
+            console.log('下发控制指令回调 ret = ' + JSON.stringify(ret) + ', err = ' + JSON.stringify(err));
+        });
+    }
 
-         $api.removeCls(el.querySelector( buttonClsName ), "checked");
-     }else{
-         updateButtonAttr(buttonClsName, true);
+    function updateButtonAttr(buttonClsName, isChecked) {
+        // 下发布尔可写值控制指令位置
+        //  console.log("buttonClsName = " + buttonClsName + ", isChecked = " + isChecked);
+        if (buttonClsName == ".gos_key") {
+            //  console.log('buttonClsName == ".gos_key"');
+            write(dataPoint.GosDeviceWrite_key, isChecked);
+        }
+    }
 
-         $api.addCls(el.querySelector( buttonClsName ), "checked");
-     }
-}
+    // 按钮被点击调用的方法
+    function ios7CBoxDidClick(el, blockClsName) {
+        var buttonClsName = "." + blockClsName.replace("Block", "");
 
-// 根据给定的类名获取指定的dom元素
-function getElByClsName(clsName)
-{
-    var doms = document.getElementsByClassName(clsName);
-    return doms[0];
-}
-// 设置按钮点击事件
- function addButtonClickEvent(blockClsName)
- {
-     var button = getElByClsName(blockClsName);
-     //FastClick.attach(button);
-     button.addEventListener("click", function(event) {
-         ios7CBoxDidClick(button, blockClsName);
-     }, false);
- }
+        // 渲染颜色
+        if ($api.hasCls(el.querySelector(buttonClsName), "checked")) {
+            updateButtonAttr(buttonClsName, false);
+
+            $api.removeCls(el.querySelector(buttonClsName), "checked");
+        } else {
+            updateButtonAttr(buttonClsName, true);
+
+            $api.addCls(el.querySelector(buttonClsName), "checked");
+        }
+    }
+
+    // 根据给定的类名获取指定的dom元素
+    function getElByClsName(clsName) {
+        var doms = document.getElementsByClassName(clsName);
+        return doms[0];
+    }
+    // 设置按钮点击事件
+    function addButtonClickEvent(blockClsName) {
+        var button = getElByClsName(blockClsName);
+        //FastClick.attach(button);
+        button.addEventListener("click", function(event) {
+            ios7CBoxDidClick(button, blockClsName);
+        }, false);
+    }
 
     function fnUnsubscribe() {
         var gizWifiDevice = api.require("gizWifiDevice");
-        gizWifiDevice.setSubscribe({device: device, subscribed: false}, function(ret, err) {});
+        gizWifiDevice.setSubscribe({
+            device: device,
+            subscribed: false
+        }, function(ret, err) {});
     }
 </script>
+
 </html>
