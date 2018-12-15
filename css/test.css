@@ -79,7 +79,7 @@
         .ooopic {
             position: absolute;
             /*positionΪabsolute��Ҫָ��������widt��heightֵ*/
-            bottom: -15px;
+            bottom: 100px;
             right: 75px;
             margin: 50px;
             /*Ҫ���ÿ���ֵ*/
@@ -115,7 +115,7 @@
             background-size: 200px auto;
             background-position: center center;
             position: relative;
-            top: 1px;
+            top: 100px;
             right: 0px;
         }
 
