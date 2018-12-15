@@ -1,0 +1,124 @@
+        .div-title {
+            background-color: #f99;
+            text-align: center;
+            padding-left: 0px;
+            color: #999;
+            font-size: 12px;
+            border: 1px;
+            border-style: solid;
+            margin: 10px;
+        }
+
+        .input {
+            background-color: #ffe;
+            margin-top: 10px;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+            border-width: 1px 0;
+        }
+        /*��ÿ������flex-wrap��div�鶼������*/
+
+        .input .flex-wrap {
+            /*������flex-wrapͬһ�е�ͼ������ͼ�������ã����ڰ����������ڲ���ͼ���಻������*/
+            background-position: left center;
+            padding: 15px 0;
+            padding-left: 32px;
+            position: relative;
+            background-size: 18px auto
+        }
+        /*��ͬʱ��flex-wrap��ic-wifi��������div�������ã���wifiͼ�겻�����ã�������ʾһ����*/
+
+        .input .flex-wrap.ic-wifi {
+            border-bottom: 1px;
+            border-style: solid;
+            border-color: #ddd;
+        }
+
+        .input .flex-wrap p {
+            font-size: 15px;
+            font-family: "Arial"
+        }
+
+        .input .flex-wrap .ic-eye {
+            position: absolute;
+            right: 0px;
+            top: 0;
+            width: 45px;
+            height: 45px;
+            background-position: center 18px;
+            background-size: 18px auto;
+        }
+
+        .input .flex-wrap .ic-eye.active {
+            background-position: center -15px;
+        }
+
+        .btns .submit {
+            background-color: #f3d41d;
+            color: #f33333;
+            line-height: 35px;
+            /*Բ��*/
+            border-radius: 53px;
+            /*ֻ������������*/
+            text-align: center;
+            font-size: 15px;
+            /*���߾�*/
+            margin: 50px 0;
+        }
+
+        .flex-wrap .ic-arrow-r {
+            /*positionΪabsolute��Ҫָ��������widt��heightֵ*/
+            position: absolute;
+            right: 0px;
+            top: 0;
+            width: 45px;
+            height: 45px;
+            background-size: 18px auto;
+        }
+
+        .ooopic {
+            position: absolute;
+            /*positionΪabsolute��Ҫָ��������widt��heightֵ*/
+            bottom: -15px;
+            right: 75px;
+            margin: 50px;
+            /*Ҫ���ÿ���ֵ*/
+            width: 140px;
+            height: 140px;
+            /*ע��../../·��λ��*/
+            background-image: url(../image/ddd.jpg);
+            background-repeat: no-repeat;
+            /*x�᷽�����У�Y�᷽������*/
+            background-position: -919px -185px;
+            background-size: auto 500px;
+            border-radius: 100px;
+        }
+
+        .ooopic.off {
+            /*background-image: url(../image/ddd.jpg);*/
+            background-position: -760px -185px;
+        }
+
+        .ooopic .key_name {
+            margin-top: 140px;
+            /*设置字体*/
+            font-size: 30px;
+            text-align: center;
+            color: red;
+        }
+
+        .Lamp {
+            background-image: url(../image/LampOn.png);
+            background-repeat: no-repeat;
+            width: auto;
+            height: 200px;
+            background-size: 200px auto;
+            background-position: center center;
+            position: relative;
+            top: 1px;
+            right: 0px;
+        }
+
+        .Lamp.Off{
+          background-image: url(../image/LampOff.png);
+        }
