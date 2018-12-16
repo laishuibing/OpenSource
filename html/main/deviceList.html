@@ -371,21 +371,6 @@
 			}
 		}
 
-<<<<<<< HEAD
-	function receive_fnSetSubscribe(ret, err) {
-		api.hideProgress();
-		if (ret) {
-			fnJumpWin({
-								name : 'control',
-								path : '/object',
-			//	name: 'myControl', //jump to myControl.html
-			//	path: '/object',
-				pageParam: $api.getStorage('device_message')
-			});
-			fnAppear();
-		} else {
-			fnNotes(err);
-=======
 		function receive_fnSetSubscribe(ret, err) {
 			api.hideProgress();
 			if (ret) {
@@ -398,7 +383,6 @@
 			} else {
 				fnNotes(err);
 			}
->>>>>>> 增加回账号登陆页面，修复远程控制
 		}
 
 		function receive_fnRegisterNotifications(ret, err) {
