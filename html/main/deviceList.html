@@ -259,6 +259,8 @@
 <script type="text/javascript">
 	var gizWifiSDK, gizWifiDevice;
 	apiready = function() {
+		api.removeLaunchView();
+
 		gizWifiSDK = api.require("gizWifiSDK");
 		gizWifiDevice = api.require("gizWifiDevice");
 		api.addEventListener({
