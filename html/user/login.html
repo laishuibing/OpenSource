@@ -47,16 +47,19 @@
 		function receive_fnUserLoginAnonymous(ret, err) {
 			// alert("receive_fnUserLoginAnonymous ret = " + JSON.stringify(ret));
 			// alert("receive_fnUserLoginAnonymous err = " + JSON.stringify(err));
+			/*
 			if (ret) {
 				fnSaveUser(ret, true);
 			} else {
 				fnSaveUser(err, true);
 			}
 			api.hideProgress();
+			*/
 		}
 
+/*
 		function fnSaveUser(ret, hasJump) {
-			/*
+
 			api.setPrefs({
 				key : 'user',
 				value : JSON.stringify(ret)
@@ -70,8 +73,8 @@
 					slidBackEnabled : true
 				});
 			});
-			*/
-		}
+
+		}*/
 /*
 		function fnEye(el) {
 			if ($api.hasCls(el, 'active')) {
