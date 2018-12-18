@@ -249,9 +249,6 @@
 				</li>-->
 		</ul>
 	</div>
-	<div tapmode="opacity" onclick="fnUserLoginAnonymous();" class="jump">
-		跳过&gt;&gt;
-	</div>
 	<br>
 	<br>
 	<br>
@@ -262,7 +259,7 @@
 <script type="text/javascript">
 	var gizWifiSDK, gizWifiDevice;
 	apiready = function() {
-		api.removeLaunchView();
+		api.removeLaunchView();																										//增加了清除主页函数函数
 
 		gizWifiSDK = api.require("gizWifiSDK");
 		gizWifiDevice = api.require("gizWifiDevice");
@@ -270,25 +267,17 @@
 			name: 'viewappear'
 		}, fnAppear);
 		fnAppear();
-	}
 
-
-	function fnUserLoginAnonymous() {
-		fnJumpWin({
-			name : 'deviceList',
-			path : '/main'
-		});
-		api.execScript({
+		api.execScript({																														//增加了调用index匿名函数
 			name : 'root',
 			script : 'fnUserLoginAnonymous(' + JSON.stringify({
 				winName : api.winName,
 				frameName : api.frameName
 			}) + ')'
 		});
+
 	}
 
-function receive_fnUserLoginAnonymous(ret, err) {
-}
 	function fnAppear() {
 		fnGetListInfo();
 		api.execScript({
